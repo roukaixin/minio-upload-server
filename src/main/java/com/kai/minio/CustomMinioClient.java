@@ -154,7 +154,7 @@ public class CustomMinioClient extends MinioAsyncClient{
      * 分片列表
      * @param bucketName 桶名
      * @param objectName 文件路径
-     * @param maxParts 多少个分片 （可选）
+     * @param maxParts 多少个分片，可选值：1-10000 （可选，不填默认10000）
      * @param uploadId uploadId
      * @return CompletableFuture<ListPartsResponse>
      */
