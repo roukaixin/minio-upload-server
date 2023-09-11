@@ -4,6 +4,11 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+/**
+ * minio 属性
+ * @author pankx
+ * @date 2023/9/11 0:12
+ */
 @Data
 @Component
 @ConfigurationProperties(prefix = "minio")

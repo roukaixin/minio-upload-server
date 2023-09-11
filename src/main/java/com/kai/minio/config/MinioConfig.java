@@ -9,6 +9,11 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.Resource;
 
+/**
+ * minio 配置类
+ * @author pankx
+ * @date 2023/9/11 0:01
+ */
 @Configuration
 @ConditionalOnBean(value = {
         Minio.class

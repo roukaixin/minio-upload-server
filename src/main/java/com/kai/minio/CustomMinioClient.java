@@ -11,6 +11,11 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * 自定义 minio 客户端
+ * @author pankx
+ * @date 2023/9/11 0:16
+ */
 public class CustomMinioClient extends MinioAsyncClient{
 
     public CustomMinioClient(MinioAsyncClient client) {

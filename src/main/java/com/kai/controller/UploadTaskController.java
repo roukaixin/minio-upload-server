@@ -15,6 +15,11 @@ import lombok.SneakyThrows;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ *
+ * @author pankx
+ * @date 2023/9/10 23:25
+ */
 @RestController
 @RequestMapping("/v1/minio")
 @Tag(name = "上传管理模块")
