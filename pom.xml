@@ -27,8 +27,6 @@
         <knife4j-openapi3-jakarta-spring-boot-starter.version>4.4.0</knife4j-openapi3-jakarta-spring-boot-starter.version>
         <!-- minio 版本 -->
         <minio.version>8.5.8</minio.version>
-        <!-- springdoc 文档版本 -->
-        <springdoc.version>1.6.15</springdoc.version>
         <!-- hu tool 工具版本 -->
         <hutool.version>5.8.25</hutool.version>
     </properties>
@@ -42,28 +40,6 @@
             <artifactId>hutool-all</artifactId>
             <version>${hutool.version}</version>
         </dependency>
-
-        <!-- springdoc webmvc -->
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-webmvc-core</artifactId>
-            <version>${springdoc.version}</version>
-        </dependency>
-
-        <!-- springdoc ui-->
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <version>${springdoc.version}</version>
-        </dependency>
-
-        <!-- springdoc java支持-->
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-javadoc</artifactId>
-            <version>${springdoc.version}</version>
-        </dependency>
-
 
         <!-- druid 驱动 -->
         <dependency>
