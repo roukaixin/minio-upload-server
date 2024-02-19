@@ -19,18 +19,22 @@ minio:
 # swagger 配置
 springdoc:
   swagger-ui:
-    path: /swagger-ui.html # 配置 swagger ui 路径
-    enabled: true # 开启 swagger 页面
+    # 配置 swagger ui 路径
+    path: /swagger-ui.html
+    # 开启 swagger 页面
+    enabled: true
   api-docs:
-    path: /v3/api-docs # swagger 文档访问路径
-    enabled: true # 开启 swagger 文档
-  packages-to-scan: com.kai # 注解包扫描路径
-#  paths-to-match: url 扫描
+    # swagger 文档访问路径
+    path: /v3/api-docs
+    # 开启 swagger 文档
+    enabled: true
+  # 注解包扫描路径
+  packages-to-scan: com.roukaixin
 
 # knife4j 配置
 knife4j:
   enable: true
-  openapi:
-    license-url: /v3/api-docs
+  setting:
+    language: zh_cn
 server:
   port: 8081
