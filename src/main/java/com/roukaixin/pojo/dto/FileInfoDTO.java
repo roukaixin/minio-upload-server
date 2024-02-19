@@ -36,7 +36,7 @@ public class FileInfoDTO {
     private Long totalSize;
 
     /**
-     * 分片大小（字节byte）
+     * 分片大小（单位：字节(byte)）
      */
     private Long chunkSize;
 }

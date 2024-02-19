@@ -16,13 +16,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UploadTask {
+
     /**
      * mybatis plus 自动生成
      */
     private Long id;
 
     /**
-     * 分片上传的uploadId
+     * 分片上传的 uploadId
      */
     private String uploadId;
 

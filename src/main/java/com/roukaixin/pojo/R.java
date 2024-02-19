@@ -7,7 +7,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 /**
- * 同意返回结果
+ * 统一结果返回
  *
  * @author 不北咪
  * @date 2023/3/16 20:30
