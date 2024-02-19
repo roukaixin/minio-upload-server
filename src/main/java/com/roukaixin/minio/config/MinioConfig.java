@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.Resource;
 
 /**
  * minio 配置类
@@ -20,8 +19,11 @@ import javax.annotation.Resource;
 })
 public class MinioConfig {
 
-    @Resource
-    private Minio minio;
+    private final Minio minio;
+
+    public MinioConfig(Minio minio) {
+        this.minio = minio;
+    }
 
     @Bean
     public CustomMinioClient customMinioClient(){
