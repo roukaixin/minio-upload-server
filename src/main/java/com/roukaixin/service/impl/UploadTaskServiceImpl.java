@@ -7,7 +7,8 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.roukaixin.mapper.UploadTaskMapper;
 import com.roukaixin.minio.CustomMinioClient;
-import com.roukaixin.minio.pojo.Minio;
+
+import com.roukaixin.minio.properties.MinioProperties;
 import com.roukaixin.pojo.R;
 import com.roukaixin.pojo.UploadTask;
 import com.roukaixin.pojo.dto.FileInfoDTO;
@@ -44,7 +45,7 @@ public class UploadTaskServiceImpl implements UploadTaskService{
     private CustomMinioClient customMinioClient;
 
     @Resource
-    private Minio minio;
+    private MinioProperties minioProperties;
 
     @Override
     public R<UploadTask> createMultipartUploadId(FileInfoDTO fileInfoDto) {
@@ -67,14 +68,14 @@ public class UploadTaskServiceImpl implements UploadTaskService{
             objectName = objectName + "/" + fileInfoDto.getFileIdentifier() +
                     fileInfoDto.getFileName().substring(fileInfoDto.getFileName().lastIndexOf("."));
             // 生成 uploadId
-            String uploadId = customMinioClient.uploadId(minio.getBucket(), null, objectName, headers, null);
+            String uploadId = customMinioClient.uploadId(minioProperties.getBucket(), null, objectName, headers, null);
 
             UploadTask build = UploadTask.builder()
                     .uploadId(uploadId)
                     .fileIdentifier(fileInfoDto.getFileIdentifier())
                     .fileName(fileInfoDto.getFileName())
                     .fileType(fileInfoDto.getFileType())
-                    .bucketName(minio.getBucket())
+                    .bucketName(minioProperties.getBucket())
                     .objectKey(objectName)
                     .totalSize(fileInfoDto.getTotalSize())
                     .chunkSize(fileInfoDto.getChunkSize())

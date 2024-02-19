@@ -1,7 +1,7 @@
 package com.roukaixin.minio.config;
 
 import com.roukaixin.minio.CustomMinioClient;
-import com.roukaixin.minio.pojo.Minio;
+import com.roukaixin.minio.properties.MinioProperties;
 import io.minio.MinioClient;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
@@ -15,14 +15,14 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ConditionalOnBean(value = {
-        Minio.class
+        MinioProperties.class
 })
 public class MinioConfig {
 
-    private final Minio minio;
+    private final MinioProperties minioProperties;
 
-    public MinioConfig(Minio minio) {
-        this.minio = minio;
+    public MinioConfig(MinioProperties minioProperties) {
+        this.minioProperties = minioProperties;
     }
 
     @Bean
@@ -31,14 +31,18 @@ public class MinioConfig {
                 CustomMinioClient.build(
                         CustomMinioClient
                                 .builder()
-                                .endpoint(minio.getEndpoint())
-                                .credentials(minio.getAccessKey(), minio.getSecretKey())
+                                .endpoint(minioProperties.getEndpoint())
+                                .credentials(minioProperties.getAccessKey(), minioProperties.getSecretKey())
                                 .build());
     }
 
     @Bean
     public MinioClient minioClient(){
         return
-                MinioClient.builder().endpoint(minio.getEndpoint()).credentials(minio.getAccessKey(),minio.getSecretKey()).build();
+                MinioClient
+                        .builder()
+                        .endpoint(minioProperties.getEndpoint())
+                        .credentials(minioProperties.getAccessKey(), minioProperties.getSecretKey())
+                        .build();
     }
 }

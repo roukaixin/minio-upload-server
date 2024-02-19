@@ -1,4 +1,4 @@
-package com.roukaixin.minio.pojo;
+package com.roukaixin.minio.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 @ConfigurationProperties(prefix = "minio")
-public class Minio {
+public class MinioProperties {
     /**
      * 访问地址（ip + port）
      */

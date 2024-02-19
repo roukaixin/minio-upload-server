@@ -10,6 +10,7 @@ spring:
     multipart:
       max-file-size: 1000MB
       max-request-size: 1000MB
+
 minio:
   endpoint: http://127.0.0.1:9000
   access-key: minio

@@ -1,11 +1,11 @@
 package com.roukaixin.controller;
 
-import com.roukaixin.minio.pojo.Minio;
+import com.roukaixin.minio.properties.MinioProperties;
+import com.roukaixin.pojo.R;
 import com.roukaixin.pojo.UploadTask;
 import com.roukaixin.pojo.dto.FileInfoDTO;
 import com.roukaixin.pojo.dto.UploadPart;
 import com.roukaixin.service.UploadTaskService;
-import com.roukaixin.pojo.R;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,7 +28,7 @@ public class UploadTaskController {
 
     private final MinioClient minioClient;
 
-    private final Minio minio;
+    private final MinioProperties minioProperties;
 
     private final UploadTaskService uploadTaskService;
 
@@ -59,7 +59,7 @@ public class UploadTaskController {
     public void upload(MultipartFile file){
         minioClient.putObject(
                 PutObjectArgs.builder()
-                        .bucket(minio.getBucket())
+                        .bucket(minioProperties.getBucket())
                         .object(file.getOriginalFilename())
                         .stream(file.getInputStream(),file.getSize(),-1)
                         .contentType(file.getContentType())
