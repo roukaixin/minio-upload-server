@@ -3,17 +3,17 @@ spring:
     name: MINIO-UPLOAD
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.153.128:3306/minio
+    url: jdbc:mysql://127.0.0.1:3306/minio
     username: root
-    password: "!Aa13536431379"
+    password: 12345678
   servlet:
     multipart:
       max-file-size: 1000MB
       max-request-size: 1000MB
 minio:
-  endpoint: http://192.168.153.128:9000
+  endpoint: http://127.0.0.1:9000
   access-key: minio
-  secret-key: "!Aa13536431379"
+  secret-key: 12345678
   bucket: minio-upload
 
 # swagger 配置
