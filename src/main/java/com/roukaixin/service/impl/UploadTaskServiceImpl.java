@@ -13,9 +13,7 @@ import com.roukaixin.pojo.UploadTask;
 import com.roukaixin.pojo.dto.FileInfoDTO;
 import com.roukaixin.pojo.dto.UploadPart;
 import com.roukaixin.service.UploadTaskService;
-import io.minio.AbortMultipartUploadResponse;
 import io.minio.ListPartsResponse;
-import io.minio.ObjectWriteResponse;
 import io.minio.UploadPartResponse;
 import io.minio.messages.Part;
 import jakarta.annotation.Resource;
@@ -66,7 +64,8 @@ public class UploadTaskServiceImpl implements UploadTaskService{
                 headers = HashMultimap.create();
                 headers.put("Content-Type", fileInfoDto.getFileType());
             }
-            objectName = objectName + "/" + fileInfoDto.getFileIdentifier() + fileInfoDto.getFileName().substring(fileInfoDto.getFileName().lastIndexOf("."));
+            objectName = objectName + "/" + fileInfoDto.getFileIdentifier() +
+                    fileInfoDto.getFileName().substring(fileInfoDto.getFileName().lastIndexOf("."));
             // 生成 uploadId
             String uploadId = customMinioClient.uploadId(minio.getBucket(), null, objectName, headers, null);
 
@@ -81,11 +80,11 @@ public class UploadTaskServiceImpl implements UploadTaskService{
                     .chunkSize(fileInfoDto.getChunkSize())
                     .chunkNumber((int) Math.ceil(fileInfoDto.getTotalSize() * 1.0 / fileInfoDto.getChunkSize()))
                     .completed(0).build();
-            int insert = uploadTaskMapper.insert(build);
-            return R.ok("创建 uploadId 成功",task);
+            uploadTaskMapper.insert(build);
+            return R.ok("创建 uploadId 成功", build);
         } else if (task.getCompleted().equals(0)){
             // 还没有合并文件
-            return R.ok("已经创建，请上传分片",task);
+            return R.ok("已经创建，请上传分片", task);
         }else {
             return new R<UploadTask>().setStatus(500).setMessage("错误操作");
         }
@@ -95,20 +94,26 @@ public class UploadTaskServiceImpl implements UploadTaskService{
     @Override
     public R<Object> uploadPartAsync(UploadPart uploadPart) {
         // 上传任务
-        UploadTask uploadTask = uploadTaskMapper.selectOne(new LambdaQueryWrapper<UploadTask>().eq(UploadTask::getFileIdentifier, uploadPart.getFileIdentifier()));
+        UploadTask uploadTask = uploadTaskMapper.selectOne(new LambdaQueryWrapper<UploadTask>()
+                .eq(UploadTask::getFileIdentifier, uploadPart.getFileIdentifier()));
         Multimap<String, String> headers = null;
         if (StringUtils.hasText(uploadTask.getFileType())) {
             headers = HashMultimap.create();
             headers.put("Content-Type", uploadTask.getFileType());
         }
-        String etag = null;
+        String etag;
         try {
-            CompletableFuture<UploadPartResponse> partAsync = customMinioClient.uploadPartAsync(uploadTask.getBucketName(), uploadTask.getObjectKey(), uploadPart.getFile().getInputStream(), uploadPart.getFile().getSize(), uploadTask.getUploadId(), uploadPart.getPartNumber(), headers);
+            CompletableFuture<UploadPartResponse> partAsync = customMinioClient.uploadPartAsync(
+                    uploadTask.getBucketName(), uploadTask.getObjectKey(),
+                    uploadPart.getFile().getInputStream(), uploadPart.getFile().getSize(),
+                    uploadTask.getUploadId(), uploadPart.getPartNumber(), headers);
             etag = partAsync.get().etag();
+            log.info("etag：{}", etag);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("上传文件失败", e);
             // 上传失败，清除上传任务
-            CompletableFuture<AbortMultipartUploadResponse> abortMultipartUploadAsync = customMinioClient.abortMultipartUploadAsync(uploadTask.getBucketName(), uploadTask.getObjectKey(), uploadTask.getUploadId());
+            customMinioClient.abortMultipartUploadAsync(uploadTask.getBucketName(), uploadTask.getObjectKey(),
+                    uploadTask.getUploadId());
             LambdaQueryWrapper<UploadTask> wrapper = new LambdaQueryWrapper<>();
             wrapper.eq(UploadTask::getUploadId, uploadTask.getUploadId());
             uploadTaskMapper.delete(wrapper);
@@ -118,14 +123,16 @@ public class UploadTaskServiceImpl implements UploadTaskService{
 
     @SneakyThrows
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public R<String> completeMultipartUploadAsync(FileInfoDTO fileInfoDto) {
         // 上传任务
-        UploadTask uploadTask = uploadTaskMapper.selectOne(new LambdaQueryWrapper<UploadTask>().eq(UploadTask::getFileIdentifier, fileInfoDto.getFileIdentifier()));
-        CompletableFuture<ListPartsResponse> partsAsync = customMinioClient.listPartsAsync(uploadTask.getBucketName(), uploadTask.getObjectKey(),uploadTask.getChunkNumber(), uploadTask.getUploadId());
+        UploadTask uploadTask = uploadTaskMapper.selectOne(new LambdaQueryWrapper<UploadTask>()
+                .eq(UploadTask::getFileIdentifier, fileInfoDto.getFileIdentifier()));
+        CompletableFuture<ListPartsResponse> partsAsync = customMinioClient.listPartsAsync(uploadTask.getBucketName(),
+                uploadTask.getObjectKey(),uploadTask.getChunkNumber(), uploadTask.getUploadId());
         List<Part> partList = partsAsync.get().result().partList();
         // 判断是否上传全部分片
-        if (!(uploadTask.getChunkNumber() == partList.size())){
+        if (uploadTask.getChunkNumber() != partList.size()){
             throw new RuntimeException("分片没有上传完成，不能进行合并");
         }
         Part[] parts = new Part[partList.size()];
@@ -136,11 +143,12 @@ public class UploadTaskServiceImpl implements UploadTaskService{
         }
         try {
             long startTime = System.currentTimeMillis();
-            CompletableFuture<ObjectWriteResponse> completeMultipartUploadAsync = customMinioClient.completeMultipartUploadAsync(uploadTask.getBucketName(), uploadTask.getObjectKey(), uploadTask.getUploadId(), parts);
+            customMinioClient.completeMultipartUploadAsync(uploadTask.getBucketName(), uploadTask.getObjectKey(),
+                    uploadTask.getUploadId(), parts);
             long endTime = System.currentTimeMillis();
             log.info("合并分片耗时：{} ms",endTime - startTime);
             uploadTask.setCompleted(1);
-            LambdaUpdateWrapper<UploadTask> wrapper = new LambdaUpdateWrapper<UploadTask>();
+            LambdaUpdateWrapper<UploadTask> wrapper = new LambdaUpdateWrapper<>();
             wrapper.eq(UploadTask::getId, uploadTask.getId());
             uploadTaskMapper.update(uploadTask,wrapper);
         }catch (Exception e){
