@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.15</version>
+        <version>3.2.2</version>
         <relativePath/>
     </parent>
 
@@ -18,23 +18,19 @@
 
     <properties>
         <!-- java 版本 -->
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
         <!-- druid springboot 驱动版本 -->
-        <spring-boot-druid.version>1.2.16</spring-boot-druid.version>
+        <druid-spring-boot-starter.version>1.2.21</druid-spring-boot-starter.version>
         <!-- mybatis plus 版本 -->
-        <mybatis.plus.version>3.5.3.1</mybatis.plus.version>
+        <mybatis-plus-spring-boot3-starter.version>3.5.5</mybatis-plus-spring-boot3-starter.version>
         <!-- knife4j 版本 -->
-        <knife4j.version>4.0.0</knife4j.version>
-        <!-- minio -->
-        <minio.version>8.5.2</minio.version>
+        <knife4j-openapi3-jakarta-spring-boot-starter.version>4.4.0</knife4j-openapi3-jakarta-spring-boot-starter.version>
+        <!-- minio 版本 -->
+        <minio.version>8.5.8</minio.version>
         <!-- springdoc 文档版本 -->
         <springdoc.version>1.6.15</springdoc.version>
-        <!-- snakeyaml 版本 -->
-        <snakeyaml.version>2.0</snakeyaml.version>
-        <!-- jackson  版本 -->
-        <jackson.version.databind>2.15.2</jackson.version.databind>
         <!-- hu tool 工具版本 -->
-        <hutool.version>5.8.21</hutool.version>
+        <hutool.version>5.8.25</hutool.version>
     </properties>
 
 
@@ -73,7 +69,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-            <version>${spring-boot-druid.version}</version>
+            <version>${druid-spring-boot-starter.version}</version>
         </dependency>
 
         <!-- mysql 驱动 -->
@@ -85,38 +81,15 @@
         <!-- mybatis plus -->
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>${mybatis.plus.version}</version>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+            <version>${mybatis-plus-spring-boot3-starter.version}</version>
         </dependency>
 
         <!-- knife4j 文档 -->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
-            <version>${knife4j.version}</version>
-            <!--排查低版本-->
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springdoc</groupId>
-                    <artifactId>springdoc-openapi-common</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springdoc</groupId>
-                    <artifactId>springdoc-openapi-webflux-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springdoc</groupId>
-                    <artifactId>springdoc-openapi-webmvc-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>io.swagger.core.v3</groupId>
-                    <artifactId>swagger-models</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>io.swagger.core.v3</groupId>
-                    <artifactId>swagger-annotations</artifactId>
-                </exclusion>
-            </exclusions>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+            <version>${knife4j-openapi3-jakarta-spring-boot-starter.version}</version>
         </dependency>
 
         <!-- minio -->
