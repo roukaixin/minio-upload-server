@@ -32,14 +32,14 @@ public class UploadTaskController {
 
     private final UploadTaskService uploadTaskService;
 
-    @Operation(description = "创建分片上传")
+    @Operation(summary = "创建分片上传")
     @PostMapping("/createMultipartUploadId")
     @CrossOrigin
     public R<UploadTask> createMultipartUploadId(@RequestBody FileInfoDTO fileInfoDto){
         return uploadTaskService.createMultipartUploadId(fileInfoDto);
     }
 
-    @Operation(description = "上传分片")
+    @Operation(summary = "上传分片")
     @PutMapping("/uploadPartAsync")
     @CrossOrigin
     public R<Object> uploadPartAsync(UploadPart uploadPart){
@@ -47,7 +47,7 @@ public class UploadTaskController {
     }
 
 
-    @Operation(description = "合并分片")
+    @Operation(summary = "合并分片")
     @PostMapping("/completeMultipartUploadAsync")
     @CrossOrigin
     public R<String> completeMultipartUploadAsync(@RequestBody FileInfoDTO fileInfoDto){
