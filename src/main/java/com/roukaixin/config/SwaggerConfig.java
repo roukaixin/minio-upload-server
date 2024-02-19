@@ -1,4 +1,4 @@
-package com.kai.config;
+package com.roukaixin.config;
 
 import org.springframework.context.annotation.Configuration;
 

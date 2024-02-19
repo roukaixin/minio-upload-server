@@ -1,18 +1,18 @@
-package com.kai.service.impl;
+package com.roukaixin.service.impl;
 
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import com.kai.mapper.UploadTaskMapper;
-import com.kai.minio.CustomMinioClient;
-import com.kai.minio.pojo.Minio;
-import com.kai.pojo.UploadTask;
-import com.kai.pojo.dto.FileInfoDTO;
-import com.kai.pojo.dto.UploadPart;
-import com.kai.service.UploadTaskService;
-import com.kai.utils.R;
+import com.roukaixin.mapper.UploadTaskMapper;
+import com.roukaixin.minio.CustomMinioClient;
+import com.roukaixin.minio.pojo.Minio;
+import com.roukaixin.pojo.UploadTask;
+import com.roukaixin.pojo.dto.FileInfoDTO;
+import com.roukaixin.pojo.dto.UploadPart;
+import com.roukaixin.service.UploadTaskService;
+import com.roukaixin.pojo.R;
 import io.minio.AbortMultipartUploadResponse;
 import io.minio.ListPartsResponse;
 import io.minio.ObjectWriteResponse;

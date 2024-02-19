@@ -1,9 +1,9 @@
-package com.kai.service;
+package com.roukaixin.service;
 
-import com.kai.pojo.UploadTask;
-import com.kai.pojo.dto.FileInfoDTO;
-import com.kai.pojo.dto.UploadPart;
-import com.kai.utils.R;
+import com.roukaixin.pojo.UploadTask;
+import com.roukaixin.pojo.dto.FileInfoDTO;
+import com.roukaixin.pojo.dto.UploadPart;
+import com.roukaixin.pojo.R;
 
 /**
  * 分片上传-分片任务记录

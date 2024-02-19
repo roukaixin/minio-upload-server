@@ -1,7 +1,7 @@
-package com.kai.mapper;
+package com.roukaixin.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.kai.pojo.UploadTask;
+import com.roukaixin.pojo.UploadTask;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

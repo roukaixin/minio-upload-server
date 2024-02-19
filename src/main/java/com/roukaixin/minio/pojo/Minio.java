@@ -1,4 +1,4 @@
-package com.kai.minio.pojo;
+package com.roukaixin.minio.pojo;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

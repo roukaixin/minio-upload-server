@@ -1,4 +1,4 @@
-package com.kai;
+package com.roukaixin;
 
 import io.minio.GetBucketPolicyArgs;
 import io.minio.MinioClient;

@@ -1,4 +1,4 @@
-package com.kai.pojo.dto;
+package com.roukaixin.pojo.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

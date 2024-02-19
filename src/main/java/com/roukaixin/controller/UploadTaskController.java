@@ -1,11 +1,11 @@
-package com.kai.controller;
+package com.roukaixin.controller;
 
-import com.kai.minio.pojo.Minio;
-import com.kai.pojo.UploadTask;
-import com.kai.pojo.dto.FileInfoDTO;
-import com.kai.pojo.dto.UploadPart;
-import com.kai.service.UploadTaskService;
-import com.kai.utils.R;
+import com.roukaixin.minio.pojo.Minio;
+import com.roukaixin.pojo.UploadTask;
+import com.roukaixin.pojo.dto.FileInfoDTO;
+import com.roukaixin.pojo.dto.UploadPart;
+import com.roukaixin.service.UploadTaskService;
+import com.roukaixin.pojo.R;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.swagger.v3.oas.annotations.Operation;

@@ -1,7 +1,7 @@
-package com.kai.minio.config;
+package com.roukaixin.minio.config;
 
-import com.kai.minio.CustomMinioClient;
-import com.kai.minio.pojo.Minio;
+import com.roukaixin.minio.CustomMinioClient;
+import com.roukaixin.minio.pojo.Minio;
 import io.minio.MinioClient;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
