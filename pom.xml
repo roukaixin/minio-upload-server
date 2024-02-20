@@ -14,7 +14,9 @@
     <version>0.0.1</version>
 
     <name>minio-upload</name>
-    <description>minio-upload</description>
+    <description>
+        分片上传、断点续传、秒穿
+    </description>
 
     <properties>
         <!-- java 版本 -->
