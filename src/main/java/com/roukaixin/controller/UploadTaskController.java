@@ -1,6 +1,6 @@
 package com.roukaixin.controller;
 
-import com.roukaixin.minio.properties.MinioProperties;
+import com.roukaixin.oss.minio.properties.MinioProperties;
 import com.roukaixin.pojo.R;
 import com.roukaixin.pojo.UploadTask;
 import com.roukaixin.pojo.dto.FileInfoDTO;
@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author pankx
  * @date 2023/9/10 23:25
  */
-@RestController
+//@RestController
 @RequestMapping("/v1/minio")
 @Tag(name = "上传管理模块")
 @RequiredArgsConstructor

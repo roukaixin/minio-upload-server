@@ -1,4 +1,4 @@
-package com.roukaixin.minio;
+package com.roukaixin.oss.minio;
 
 import com.google.common.collect.Multimap;
 import io.minio.*;

@@ -1,7 +1,9 @@
 package com.roukaixin;
 
+import com.roukaixin.oss.minio.properties.MinioProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 /**
  * 启动类
@@ -12,7 +14,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MinioUploadApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(MinioUploadApplication.class, args);
+        ConfigurableApplicationContext run = SpringApplication.run(MinioUploadApplication.class, args);
+        MinioProperties bean = run.getBean(MinioProperties.class);
+        System.out.println(bean);
     }
-
 }

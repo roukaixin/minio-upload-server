@@ -6,9 +6,8 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.roukaixin.mapper.UploadTaskMapper;
-import com.roukaixin.minio.CustomMinioClient;
-
-import com.roukaixin.minio.properties.MinioProperties;
+import com.roukaixin.oss.minio.CustomMinioClient;
+import com.roukaixin.oss.minio.properties.MinioProperties;
 import com.roukaixin.pojo.R;
 import com.roukaixin.pojo.UploadTask;
 import com.roukaixin.pojo.dto.FileInfoDTO;
@@ -20,7 +19,6 @@ import io.minio.messages.Part;
 import jakarta.annotation.Resource;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -34,7 +32,7 @@ import java.util.concurrent.CompletableFuture;
  * @author 不北咪
  * @date 2023/3/11 23:11
  */
-@Service
+//@Service
 @Slf4j
 public class UploadTaskServiceImpl implements UploadTaskService{
 

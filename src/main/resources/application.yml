@@ -11,11 +11,12 @@ spring:
       max-file-size: 1000MB
       max-request-size: 1000MB
 
-minio:
-  endpoint: http://127.0.0.1:9000
-  access-key: minio
-  secret-key: 12345678
-  bucket: minio-upload
+
+#minio:
+#  endpoint: http://127.0.0.1:9000
+#  access-key: minio
+#  secret-key: 12345678
+#  bucket: minio-upload
 
 # swagger 配置
 springdoc:
@@ -39,3 +40,9 @@ knife4j:
     language: zh_cn
 server:
   port: 8081
+
+oss:
+  type: local
+  config:
+    local:
+      root-path:
