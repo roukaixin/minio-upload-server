@@ -1,6 +1,6 @@
 package com.roukaixin.controller;
 
-import com.roukaixin.oss.minio.properties.MinioProperties;
+import com.roukaixin.oss.properties.MinioProperties;
 import com.roukaixin.pojo.R;
 import com.roukaixin.pojo.UploadTask;
 import com.roukaixin.pojo.dto.FileInfoDTO;

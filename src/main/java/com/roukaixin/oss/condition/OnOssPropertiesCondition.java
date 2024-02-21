@@ -1,4 +1,4 @@
-package com.roukaixin.oss.conditional;
+package com.roukaixin.oss.condition;
 
 import com.roukaixin.oss.enums.OssTypeEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,7 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
  * @date 2024/2/20 上午10:07
  */
 @Slf4j
-public class OnOssPropertiesConditional implements Condition {
+public class OnOssPropertiesCondition implements Condition {
 
     @Override
     public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {

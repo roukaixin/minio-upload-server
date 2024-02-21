@@ -1,4 +1,4 @@
-package com.roukaixin.oss.minio.properties;
+package com.roukaixin.oss.properties;
 
 import lombok.Getter;
 import lombok.Setter;
