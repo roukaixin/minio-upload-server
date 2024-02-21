@@ -1,5 +1,6 @@
 package com.roukaixin.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.roukaixin.pojo.UploadTask;
 import com.roukaixin.pojo.dto.FileInfoDTO;
 import com.roukaixin.pojo.dto.UploadPart;
@@ -11,7 +12,7 @@ import com.roukaixin.pojo.R;
  * @author 不北咪
  * @date 2023/3/11 23:12
  */
-public interface UploadTaskService{
+public interface UploadTaskService extends IService<UploadTask> {
 
 
     /**

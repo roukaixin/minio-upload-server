@@ -3,6 +3,7 @@ package com.roukaixin.service.impl;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.roukaixin.mapper.UploadTaskMapper;
@@ -19,6 +20,7 @@ import io.minio.messages.Part;
 import jakarta.annotation.Resource;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -32,9 +34,9 @@ import java.util.concurrent.CompletableFuture;
  * @author 不北咪
  * @date 2023/3/11 23:11
  */
-//@Service
+@Service
 @Slf4j
-public class UploadTaskServiceImpl implements UploadTaskService{
+public class UploadTaskServiceImpl extends ServiceImpl<UploadTaskMapper, UploadTask> implements UploadTaskService {
 
     @Resource
     private UploadTaskMapper uploadTaskMapper;
@@ -50,10 +52,7 @@ public class UploadTaskServiceImpl implements UploadTaskService{
         LambdaQueryWrapper<UploadTask> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(UploadTask::getFileIdentifier,fileInfoDto.getFileIdentifier());
         UploadTask task = uploadTaskMapper.selectOne(wrapper);
-        if (task != null && task.getCompleted().equals(1)){
-            // 已经合并了
-            return R.ok("分片已经合并",task);
-        }else if (task == null) {
+        if (task == null) {
             // 没有上传任务
             String objectName = "/" + DateUtil.formatDate(new Date());
             Multimap<String, String> headers = null;
@@ -78,14 +77,15 @@ public class UploadTaskServiceImpl implements UploadTaskService{
                     .totalSize(fileInfoDto.getTotalSize())
                     .chunkSize(fileInfoDto.getChunkSize())
                     .chunkNumber((int) Math.ceil(fileInfoDto.getTotalSize() * 1.0 / fileInfoDto.getChunkSize()))
-                    .completed(0).build();
+                    .completed(false).build();
             uploadTaskMapper.insert(build);
             return R.ok("创建 uploadId 成功", build);
-        } else if (task.getCompleted().equals(0)){
+        } else if (task.isCompleted()) {
+            // 已经合并了
+            return R.ok("分片已经合并",task);
+        } else {
             // 还没有合并文件
             return R.ok("已经创建，请上传分片", task);
-        }else {
-            return new R<UploadTask>().setStatus(500).setMessage("错误操作");
         }
     }
 
@@ -146,7 +146,7 @@ public class UploadTaskServiceImpl implements UploadTaskService{
                     uploadTask.getUploadId(), parts);
             long endTime = System.currentTimeMillis();
             log.info("合并分片耗时：{} ms",endTime - startTime);
-            uploadTask.setCompleted(1);
+            uploadTask.setCompleted(true);
             LambdaUpdateWrapper<UploadTask> wrapper = new LambdaUpdateWrapper<>();
             wrapper.eq(UploadTask::getId, uploadTask.getId());
             uploadTaskMapper.update(uploadTask,wrapper);

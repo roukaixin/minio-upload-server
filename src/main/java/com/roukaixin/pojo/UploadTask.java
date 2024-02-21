@@ -48,7 +48,7 @@ public class UploadTask {
     private String bucketName;
 
     /**
-     * 文件的key（minio的路径）
+     * 文件的key（minio的路径）。构成：yyyy-MM-dd/type/fileIdentifier/fileName
      */
     private String objectKey;
 
@@ -70,5 +70,5 @@ public class UploadTask {
     /**
      * 是否上传完成
      */
-    private Integer completed;
+    private boolean completed;
 }

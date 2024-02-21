@@ -1,6 +1,8 @@
 package com.roukaixin.oss.strategy;
 
 import com.roukaixin.oss.properties.MinioProperties;
+import com.roukaixin.pojo.UploadTask;
+import com.roukaixin.pojo.dto.FileInfoDTO;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
@@ -14,4 +16,8 @@ import org.springframework.stereotype.Component;
 @ConditionalOnBean(value = MinioProperties.class)
 public class MinioStrategy implements UploadStrategy {
 
+    @Override
+    public UploadTask createMultipartUpload(FileInfoDTO fileInfo) {
+        return null;
+    }
 }
