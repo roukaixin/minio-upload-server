@@ -17,6 +17,14 @@ import java.util.Objects;
 public class UploadUtils {
 
 
+    /**
+     * 获取 objectKey
+     * @param fileType 文件类型
+     * @param fileIdentifier 文件md5
+     * @param fileName 文件名
+     * @param ossTypeEnum oss 类型
+     * @return objectKey
+     */
     public static String getObjectKey(String fileType, String fileIdentifier, String fileName, OssTypeEnum ossTypeEnum) {
         String separator;
         if (Objects.requireNonNull(ossTypeEnum) == OssTypeEnum.LOCAL) {
@@ -32,5 +40,9 @@ public class UploadUtils {
         }
         objectKey.append(separator).append(fileIdentifier).append(separator).append(fileName);
         return objectKey.toString();
+    }
+
+    public static String getSavePath() {
+        return null;
     }
 }

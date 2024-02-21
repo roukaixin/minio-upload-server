@@ -60,6 +60,7 @@ public class LocalStrategy implements UploadStrategy{
                     .build();
             // 把上传人物保存到数据库
             uploadTaskService.save(build);
+            // 创建保存的路径
             return build;
         } else {
             // 任务以存在
