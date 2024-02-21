@@ -30,7 +30,7 @@ create table upload_task
     total_size      bigint                       null comment '文件大小 （单位：byte）',
     chunk_size      bigint                       null comment '每块分片大小（单位：byte）',
     chunk_number    int                          null comment '分片数量',
-    is_completed    tinyint unsigned default '0' null comment '是否已经上传完成（0否，1是）',
+    is_completed    tinyint unsigned default '0' null comment '是否已经上传完成（0否，1是）。说明：合并成功才算是上传完成',
     constraint upload_task_un
         unique (file_identifier)
 )
