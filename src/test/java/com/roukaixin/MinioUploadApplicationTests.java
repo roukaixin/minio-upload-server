@@ -1,6 +1,8 @@
 package com.roukaixin;
 
 import com.roukaixin.oss.properties.OssProperties;
+import com.roukaixin.oss.strategy.UploadStrategy;
+import com.roukaixin.oss.strategy.UploadStrategyFactory;
 import io.minio.GetBucketPolicyArgs;
 import io.minio.MinioClient;
 import lombok.SneakyThrows;
@@ -8,12 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.File;
-
 @SpringBootTest
 class MinioUploadApplicationTests {
 
-    @Autowired
+//    @Autowired
     MinioClient minioClient;
 
     @Autowired
@@ -30,8 +30,8 @@ class MinioUploadApplicationTests {
     @Test
     @SneakyThrows
     void ossProperties() {
-        File file = new File("aa/bb");
-        System.out.println(file);
+        UploadStrategy instance = UploadStrategyFactory.getInstance();
+        System.out.println(instance.getClass().getName());
     }
 
 }
