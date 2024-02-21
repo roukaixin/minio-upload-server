@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.roukaixin.mapper.UploadTaskMapper;
-import com.roukaixin.oss.minio.CustomMinioClient;
+import com.roukaixin.oss.pojo.CustomMinioClient;
 import com.roukaixin.oss.properties.MinioProperties;
 import com.roukaixin.pojo.R;
 import com.roukaixin.pojo.UploadTask;

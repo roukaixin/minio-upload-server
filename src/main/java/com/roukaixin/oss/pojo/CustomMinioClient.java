@@ -1,4 +1,4 @@
-package com.roukaixin.oss.minio;
+package com.roukaixin.oss.pojo;
 
 import com.google.common.collect.Multimap;
 import io.minio.*;
@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
  * @author pankx
  * @date 2023/9/11 0:16
  */
-public class CustomMinioClient extends MinioAsyncClient{
+public class CustomMinioClient extends MinioAsyncClient {
 
     public CustomMinioClient(MinioAsyncClient client) {
         super(client);
