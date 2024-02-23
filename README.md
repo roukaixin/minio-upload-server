@@ -11,7 +11,7 @@
 
 ### 创建数据库
 ```mysql
-create schema blog collate utf8mb4_general_ci;
+create schema upload collate utf8mb4_general_ci;
 ```
 
 ### 创建表
