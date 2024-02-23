@@ -58,9 +58,12 @@ public class LocalStrategy implements UploadStrategy{
                                     .setScale(0, RoundingMode.UP).intValue()
                     )
                     .build();
-            // 把上传人物保存到数据库
+            // 把上传任务保存到数据库
             uploadTaskService.save(build);
             // 创建保存的路径
+            UploadUtils.getSavePath(localProperties.getRootPath(),
+                    UploadUtils.getObjectKey(fileInfo.getFileType(), fileInfo.getFileIdentifier(),
+                            fileInfo.getFileName(), ossProperties.getType()));
             return build;
         } else {
             // 任务以存在

@@ -16,6 +16,10 @@ import java.util.Objects;
  */
 public class UploadUtils {
 
+    private UploadUtils() {
+
+    }
+
 
     /**
      * 获取 objectKey
@@ -25,7 +29,8 @@ public class UploadUtils {
      * @param ossTypeEnum oss 类型
      * @return objectKey
      */
-    public static String getObjectKey(String fileType, String fileIdentifier, String fileName, OssTypeEnum ossTypeEnum) {
+    public static String getObjectKey(String fileType, String fileIdentifier,
+                                      String fileName, OssTypeEnum ossTypeEnum) {
         String separator;
         if (Objects.requireNonNull(ossTypeEnum) == OssTypeEnum.LOCAL) {
             separator = File.separator;
@@ -42,7 +47,26 @@ public class UploadUtils {
         return objectKey.toString();
     }
 
-    public static String getSavePath() {
+    /**
+     * 获取分片上传保存的路径
+     * @param rootPath 配置的目录
+     * @param objectKey 文件路径
+     * @return String
+     */
+    public static String getSavePath(String rootPath, String objectKey) {
+        // 判断是否为绝对路径
+        String osName = System.getProperty("os.name");
+        switch (osName) {
+            // linux 操作系统
+            case "Linux" -> {
+                break;
+            }
+            // windows
+            case "windows" -> {
+
+            }
+            default -> throw new RuntimeException("获取不到操作系统");
+        }
         return null;
     }
 }
