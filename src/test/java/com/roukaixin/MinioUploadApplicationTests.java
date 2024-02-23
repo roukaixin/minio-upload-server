@@ -34,4 +34,11 @@ class MinioUploadApplicationTests {
         System.out.println(instance.getClass().getName());
     }
 
+    @Test
+    void jarDir() {
+        System.out.println(System.getProperty("user.dir"));
+
+        System.out.println(System.getProperties());
+    }
+
 }
