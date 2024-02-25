@@ -18,7 +18,13 @@ public class UploadUtils {
 
     private final static String SLASH = "/";
 
-    private final static String BACKSLASH = "\\";
+    private final static String BACKSLASH = "\\\\";
+
+    private final static char COLON = ':';
+
+    private final static char BACKSLASH_CHAR = '\\';
+
+    private final static int TWO = 2;
 
     private UploadUtils() {
 
@@ -60,7 +66,7 @@ public class UploadUtils {
     public static String getSavePath(String rootPath, String objectKey) {
         // 判断是否为绝对路径
         String osName = System.getProperty("os.name");
-        String replaceRootPath = rootPath.replaceAll(SLASH, File.separator).replaceAll("\\\\", File.separator);
+        String replaceRootPath = rootPath.replaceAll(SLASH, File.separator).replaceAll(BACKSLASH, File.separator);
         String projectPath = System.getProperty("user.dir");
         final boolean b = replaceRootPath.charAt(replaceRootPath.length() - 1) == File.separatorChar;
         String tmpPath = File.separator + "tmp";
@@ -69,7 +75,7 @@ public class UploadUtils {
             // linux 操作系统
             case "Linux" -> {
                 if (replaceRootPath.charAt(0) == File.separatorChar) {
-                    if (replaceRootPath.charAt(replaceRootPath.length() - -1) == File.separatorChar) {
+                    if (b) {
                         return replaceRootPath + objectKeyPath + tmpPath;
                     } else {
                         return replaceRootPath + File.separatorChar + objectKeyPath + tmpPath;
@@ -85,7 +91,7 @@ public class UploadUtils {
             }
             // windows
             case "windows" -> {
-                if (replaceRootPath.charAt(1) == ':' && replaceRootPath.charAt(2) == '\\') {
+                if (replaceRootPath.charAt(1) == COLON && replaceRootPath.charAt(TWO) == BACKSLASH_CHAR) {
                     // 绝对路径
                     if (b) {
                         return replaceRootPath + objectKeyPath + tmpPath;
