@@ -16,6 +16,10 @@ import java.util.Objects;
  */
 public class UploadUtils {
 
+    private final static String SLASH = "/";
+
+    private final static String BACKSLASH = "\\";
+
     private UploadUtils() {
 
     }
@@ -35,12 +39,12 @@ public class UploadUtils {
         if (Objects.requireNonNull(ossTypeEnum) == OssTypeEnum.LOCAL) {
             separator = File.separator;
         } else {
-            separator = "/";
+            separator = SLASH;
         }
         String date = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
         StringBuilder objectKey = new StringBuilder(date);
         if (StringUtils.hasText(fileType)) {
-            String type = fileType.split("/")[0];
+            String type = fileType.split(SLASH)[0];
             objectKey.append(separator).append(type);
         }
         objectKey.append(separator).append(fileIdentifier).append(separator).append(fileName);
@@ -56,17 +60,49 @@ public class UploadUtils {
     public static String getSavePath(String rootPath, String objectKey) {
         // 判断是否为绝对路径
         String osName = System.getProperty("os.name");
+        String replaceRootPath = rootPath.replaceAll(SLASH, File.separator).replaceAll("\\\\", File.separator);
+        String projectPath = System.getProperty("user.dir");
+        final boolean b = replaceRootPath.charAt(replaceRootPath.length() - 1) == File.separatorChar;
+        String tmpPath = File.separator + "tmp";
+        String objectKeyPath = objectKey.split("\\.")[0];
         switch (osName) {
             // linux 操作系统
             case "Linux" -> {
-                break;
+                if (replaceRootPath.charAt(0) == File.separatorChar) {
+                    if (replaceRootPath.charAt(replaceRootPath.length() - -1) == File.separatorChar) {
+                        return replaceRootPath + objectKeyPath + tmpPath;
+                    } else {
+                        return replaceRootPath + File.separatorChar + objectKeyPath + tmpPath;
+                    }
+                } else {
+
+                    if (b) {
+                        return projectPath + File.separatorChar + replaceRootPath + objectKeyPath + tmpPath;
+                    } else {
+                        return projectPath + File.separatorChar + replaceRootPath + File.separatorChar + objectKeyPath + tmpPath;
+                    }
+                }
             }
             // windows
             case "windows" -> {
-
+                if (replaceRootPath.charAt(1) == ':' && replaceRootPath.charAt(2) == '\\') {
+                    // 绝对路径
+                    if (b) {
+                        return replaceRootPath + objectKeyPath + tmpPath;
+                    } else {
+                        return replaceRootPath + File.separatorChar + objectKeyPath + tmpPath;
+                    }
+                } else {
+                    if (b) {
+                        return projectPath + File.separatorChar + replaceRootPath + objectKeyPath + tmpPath;
+                    } else {
+                        return projectPath + File.separatorChar + replaceRootPath + File.separatorChar + objectKeyPath + tmpPath;
+                    }
+                }
             }
             default -> throw new RuntimeException("获取不到操作系统");
         }
-        return null;
     }
+
+
 }

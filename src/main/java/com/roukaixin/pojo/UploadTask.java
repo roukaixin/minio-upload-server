@@ -1,5 +1,6 @@
 package com.roukaixin.pojo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -70,5 +71,6 @@ public class UploadTask {
     /**
      * 是否上传完成
      */
+    @TableField(value = "is_completed")
     private boolean completed;
 }

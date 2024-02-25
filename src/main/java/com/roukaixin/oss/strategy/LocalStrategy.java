@@ -11,6 +11,7 @@ import jakarta.annotation.Resource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
@@ -61,9 +62,17 @@ public class LocalStrategy implements UploadStrategy{
             // 把上传任务保存到数据库
             uploadTaskService.save(build);
             // 创建保存的路径
-            UploadUtils.getSavePath(localProperties.getRootPath(),
+            String savePath = UploadUtils.getSavePath(localProperties.getRootPath(),
                     UploadUtils.getObjectKey(fileInfo.getFileType(), fileInfo.getFileIdentifier(),
                             fileInfo.getFileName(), ossProperties.getType()));
+            File file = new File(savePath);
+            if (!file.exists()) {
+                boolean mkdirs = file.mkdirs();
+                if (!mkdirs) {
+                    // 创建目录不成功
+                    throw new RuntimeException("创建分片上传目录失败");
+                }
+            }
             return build;
         } else {
             // 任务以存在
