@@ -2,7 +2,11 @@ package com.roukaixin.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.roukaixin.mapper.UploadTaskMapper;
+import com.roukaixin.oss.strategy.UploadStrategy;
+import com.roukaixin.oss.strategy.UploadStrategyFactory;
+import com.roukaixin.pojo.R;
 import com.roukaixin.pojo.UploadTask;
+import com.roukaixin.pojo.dto.FileInfoDTO;
 import com.roukaixin.service.UploadTaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,8 +21,13 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class UploadTaskServiceImpl extends ServiceImpl<UploadTaskMapper, UploadTask> implements UploadTaskService {
 
-//    @Resource
-//    private UploadTaskMapper uploadTaskMapper;
+
+    @Override
+    public R<UploadTask> createMultipartUploadId(FileInfoDTO fileInfoDto) {
+        UploadStrategy instance = UploadStrategyFactory.getInstance();
+        UploadTask multipartUpload = instance.createMultipartUpload(fileInfoDto);
+        return R.ok("创建分片任务成功", multipartUpload);
+    }
 
 //    @Resource
 //    private CustomMinioClient customMinioClient;

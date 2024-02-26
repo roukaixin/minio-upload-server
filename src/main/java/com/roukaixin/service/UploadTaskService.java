@@ -1,7 +1,9 @@
 package com.roukaixin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.roukaixin.pojo.R;
 import com.roukaixin.pojo.UploadTask;
+import com.roukaixin.pojo.dto.FileInfoDTO;
 
 /**
  * 分片上传-分片任务记录
@@ -12,13 +14,13 @@ import com.roukaixin.pojo.UploadTask;
 public interface UploadTaskService extends IService<UploadTask> {
 
 
-//    /**
-//     * 创建 uploadId
-//     * @param fileInfoDto 文件信息
-//     * @return R<UploadTask>
-//     */
-//    R<UploadTask> createMultipartUploadId(FileInfoDTO fileInfoDto);
-//
+    /**
+     * 创建 uploadId
+     * @param fileInfoDto 文件信息
+     * @return R<UploadTask>
+     */
+    R<UploadTask> createMultipartUploadId(FileInfoDTO fileInfoDto);
+
 //    /**
 //     * 上传分片
 //     * @param uploadPart 分片信息
