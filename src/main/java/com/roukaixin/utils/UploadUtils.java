@@ -1,5 +1,6 @@
 package com.roukaixin.utils;
 
+import com.roukaixin.oss.enums.OsNameEnum;
 import com.roukaixin.oss.enums.OssTypeEnum;
 import org.springframework.util.StringUtils;
 
@@ -107,6 +108,18 @@ public class UploadUtils {
                 }
             }
             default -> throw new RuntimeException("获取不到操作系统");
+        }
+    }
+
+    public static OsNameEnum getOsName() {
+        String osName = System.getProperty("os.name");
+        String osNameLowerCase = osName.toLowerCase();
+        if (osNameLowerCase.contains(OsNameEnum.LINUX.name().toLowerCase())) {
+            return OsNameEnum.LINUX;
+        } else if (osNameLowerCase.contains(OsNameEnum.WINDOWS.name().toLowerCase())) {
+            return OsNameEnum.WINDOWS;
+        } else {
+            return OsNameEnum.OTHER;
         }
     }
 
