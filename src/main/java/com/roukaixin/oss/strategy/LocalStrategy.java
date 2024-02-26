@@ -67,8 +67,8 @@ public class LocalStrategy implements UploadStrategy{
                             fileInfo.getFileName(), ossProperties.getType()));
             File file = new File(savePath);
             if (!file.exists()) {
-                boolean mkdirs = file.mkdirs();
-                if (!mkdirs) {
+                boolean mkdir = file.mkdirs();
+                if (!mkdir) {
                     // 创建目录不成功
                     throw new RuntimeException("创建分片上传目录失败");
                 }
