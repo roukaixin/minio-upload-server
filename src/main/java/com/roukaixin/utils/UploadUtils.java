@@ -66,7 +66,7 @@ public class UploadUtils {
      */
     public static String getSavePath(String rootPath, String objectKey) {
         // 判断是否为绝对路径
-        String osName = System.getProperty("os.name");
+        OsNameEnum osName = getOsName();
         String replaceRootPath = rootPath.replaceAll(SLASH, File.separator).replaceAll(BACKSLASH, File.separator);
         String projectPath = System.getProperty("user.dir");
         final boolean b = replaceRootPath.charAt(replaceRootPath.length() - 1) == File.separatorChar;
@@ -74,7 +74,7 @@ public class UploadUtils {
         String objectKeyPath = objectKey.split("\\.")[0];
         switch (osName) {
             // linux 操作系统
-            case "Linux" -> {
+            case LINUX -> {
                 if (replaceRootPath.charAt(0) == File.separatorChar) {
                     if (b) {
                         return replaceRootPath + objectKeyPath + tmpPath;
@@ -91,7 +91,7 @@ public class UploadUtils {
                 }
             }
             // windows
-            case "windows" -> {
+            case WINDOWS -> {
                 if (replaceRootPath.charAt(1) == COLON && replaceRootPath.charAt(TWO) == BACKSLASH_CHAR) {
                     // 绝对路径
                     if (b) {
