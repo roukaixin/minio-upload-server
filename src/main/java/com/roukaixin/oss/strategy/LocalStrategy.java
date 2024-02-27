@@ -43,14 +43,15 @@ public class LocalStrategy implements UploadStrategy{
                 .eq(UploadTask::getFileIdentifier, fileInfo.getFileIdentifier()));
         if (Objects.isNull(one)) {
             // 上传任务不存在，新增一个上传任务
+            String objectKey = UploadUtils.getObjectKey(fileInfo.getFileType(), fileInfo.getFileIdentifier(),
+                    fileInfo.getFileName(), ossProperties.getType());
             UploadTask build = UploadTask
                     .builder()
                     .fileIdentifier(fileInfo.getFileIdentifier())
                     .fileName(fileInfo.getFileName())
                     .fileType(fileInfo.getFileType())
                     .bucketName(localProperties.getRootPath())
-                    .objectKey(UploadUtils.getObjectKey(fileInfo.getFileType(), fileInfo.getFileIdentifier(),
-                            fileInfo.getFileName(), ossProperties.getType()))
+                    .objectKey(objectKey)
                     .totalSize(fileInfo.getTotalSize())
                     .chunkSize(fileInfo.getChunkSize())
                     .chunkNumber(
@@ -62,9 +63,7 @@ public class LocalStrategy implements UploadStrategy{
             // 把上传任务保存到数据库
             uploadTaskService.save(build);
             // 创建保存的路径
-            String savePath = UploadUtils.getSavePath(localProperties.getRootPath(),
-                    UploadUtils.getObjectKey(fileInfo.getFileType(), fileInfo.getFileIdentifier(),
-                            fileInfo.getFileName(), ossProperties.getType()));
+            String savePath = UploadUtils.getSavePath(localProperties.getRootPath(), objectKey);
             File file = new File(savePath);
             if (!file.exists()) {
                 boolean mkdir = file.mkdirs();
