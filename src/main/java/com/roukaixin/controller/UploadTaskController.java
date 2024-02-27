@@ -20,14 +20,10 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UploadTaskController {
 
-//    private final MinioClient minioClient;
-
-//    private final MinioProperties minioProperties;
-
     private final UploadTaskService uploadTaskService;
 
     @Operation(summary = "创建分片上传")
-    @PostMapping("/createMultipartUploadId")
+    @PostMapping("/create-multipart-upload-id")
     @CrossOrigin
     public R<UploadTask> createMultipartUploadId(@RequestBody FileInfoDTO fileInfoDto){
         return uploadTaskService.createMultipartUploadId(fileInfoDto);

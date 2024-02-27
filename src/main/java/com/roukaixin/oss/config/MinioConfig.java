@@ -5,6 +5,7 @@ import com.roukaixin.oss.properties.MinioProperties;
 import io.minio.MinioClient;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 
 /**
@@ -12,7 +13,7 @@ import org.springframework.context.annotation.Bean;
  * @author pankx
  * @date 2023/9/11 0:01
  */
-//@Configuration
+@Configuration
 @ConditionalOnBean(value = {
         MinioProperties.class
 })
