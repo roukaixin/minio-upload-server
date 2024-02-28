@@ -10,10 +10,10 @@
     </parent>
 
     <groupId>com.roukaixin</groupId>
-    <artifactId>minio-upload</artifactId>
+    <artifactId>minio-upload-server</artifactId>
     <version>0.0.1</version>
 
-    <name>minio-upload</name>
+    <name>minio-upload-server</name>
     <description>
         分片上传、断点续传、秒穿
     </description>
