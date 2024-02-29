@@ -15,7 +15,7 @@
 
     <name>minio-upload-server</name>
     <description>
-        分片上传、断点续传、秒穿
+        分片上传、断点续传、秒传
     </description>
 
     <properties>
