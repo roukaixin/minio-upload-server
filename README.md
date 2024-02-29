@@ -34,8 +34,8 @@ create table upload_task
     chunk_number    int                          null comment '分片数量',
     is_completed    tinyint unsigned default '0' null comment '是否已经上传完成（0否，1是）。说明：合并成功才算是上传完成',
     is_deleted      tinyint unsigned default '0' not null comment '是否删除。（0否，1是）',
-    constraint upload_task_un
-        unique (file_identifier)
+    constraint upload_task_uk
+        unique (oss_type, file_identifier)
 )
     comment '分片上传的任务';
 ```
