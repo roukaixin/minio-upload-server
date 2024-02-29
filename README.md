@@ -21,6 +21,7 @@ create table upload_task
 (
     id              bigint                       not null comment '主键 id'
         primary key,
+    oss_type        varchar(12)                  null comment 'oss 类型。（minio、本地(local)）',
     upload_id       varchar(128)                 null comment '分片上传的 uploadId （minio需要，local不需要）',
     file_identifier char(32)                     not null comment '文件唯一标识（md5）',
     file_name       varchar(32)                  null comment '文件名',
