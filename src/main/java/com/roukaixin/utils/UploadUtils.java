@@ -42,12 +42,7 @@ public class UploadUtils {
      */
     public static String getObjectKey(String fileType, String fileIdentifier,
                                       String fileName, OssTypeEnum ossTypeEnum) {
-        String separator;
-        if (Objects.requireNonNull(ossTypeEnum) == OssTypeEnum.LOCAL) {
-            separator = File.separator;
-        } else {
-            separator = SLASH;
-        }
+        String separator = getSeparator(ossTypeEnum);
         String date = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
         StringBuilder objectKey = new StringBuilder(date);
         if (StringUtils.hasText(fileType)) {
@@ -58,35 +53,49 @@ public class UploadUtils {
         return objectKey.toString();
     }
 
+
+    /**
+     * 获取临时保存的文件目录
+     * @param rootPath 配置的目录
+     * @param objectKey 文件路径
+     * @param ossTypeEnum oss 类型
+     * @return String
+     */
+    public static String getTmpSavePath(String rootPath, String objectKey, OssTypeEnum ossTypeEnum) {
+        return getSavePath(rootPath, objectKey, ossTypeEnum) + "tmp";
+    }
+
     /**
      * 获取分片上传保存的路径
      * @param rootPath 配置的目录
      * @param objectKey 文件路径
-     * @return String
+     * @param ossTypeEnum oss 类型
+     * @return String 绝对路径
      */
-    public static String getSavePath(String rootPath, String objectKey) {
+    public static String getSavePath(String rootPath, String objectKey, OssTypeEnum ossTypeEnum) {
         // 判断是否为绝对路径
         OsNameEnum osName = getOsName();
         String replaceRootPath = rootPath.replaceAll(SLASH, File.separator).replaceAll(BACKSLASH, File.separator);
         String projectPath = System.getProperty("user.dir");
         final boolean b = replaceRootPath.charAt(replaceRootPath.length() - 1) == File.separatorChar;
-        String tmpPath = File.separator + "tmp";
-        String objectKeyPath = objectKey.split("\\.")[0];
+        // 去掉文件名
+        String separator = getSeparator(ossTypeEnum);
+        String objectKeyPath = objectKey.substring(0, objectKey.lastIndexOf(separator) + 1);
         switch (osName) {
             // linux 操作系统
             case LINUX -> {
                 if (replaceRootPath.charAt(0) == File.separatorChar) {
                     if (b) {
-                        return replaceRootPath + objectKeyPath + tmpPath;
+                        return replaceRootPath + objectKeyPath;
                     } else {
-                        return replaceRootPath + File.separatorChar + objectKeyPath + tmpPath;
+                        return replaceRootPath + File.separatorChar + objectKeyPath;
                     }
                 } else {
 
                     if (b) {
-                        return projectPath + File.separatorChar + replaceRootPath + objectKeyPath + tmpPath;
+                        return projectPath + File.separatorChar + replaceRootPath + objectKeyPath;
                     } else {
-                        return projectPath + File.separatorChar + replaceRootPath + File.separatorChar + objectKeyPath + tmpPath;
+                        return projectPath + File.separatorChar + replaceRootPath + File.separatorChar + objectKeyPath;
                     }
                 }
             }
@@ -95,15 +104,15 @@ public class UploadUtils {
                 if (replaceRootPath.charAt(1) == COLON && replaceRootPath.charAt(TWO) == BACKSLASH_CHAR) {
                     // 绝对路径
                     if (b) {
-                        return replaceRootPath + objectKeyPath + tmpPath;
+                        return replaceRootPath + objectKeyPath;
                     } else {
-                        return replaceRootPath + File.separatorChar + objectKeyPath + tmpPath;
+                        return replaceRootPath + File.separatorChar + objectKeyPath;
                     }
                 } else {
                     if (b) {
-                        return projectPath + File.separatorChar + replaceRootPath + objectKeyPath + tmpPath;
+                        return projectPath + File.separatorChar + replaceRootPath + objectKeyPath;
                     } else {
-                        return projectPath + File.separatorChar + replaceRootPath + File.separatorChar + objectKeyPath + tmpPath;
+                        return projectPath + File.separatorChar + replaceRootPath + File.separatorChar + objectKeyPath;
                     }
                 }
             }
@@ -111,6 +120,25 @@ public class UploadUtils {
         }
     }
 
+    /**
+     * 获取分割符号
+     * @param ossTypeEnum oss 类型
+     * @return String
+     */
+    private static String getSeparator(OssTypeEnum ossTypeEnum) {
+        String separator;
+        if (Objects.requireNonNull(ossTypeEnum) == OssTypeEnum.LOCAL) {
+            separator = File.separator;
+        } else {
+            separator = SLASH;
+        }
+        return separator;
+    }
+
+    /**
+     * 获取操作系统
+     * @return 操作系统枚举类
+     */
     public static OsNameEnum getOsName() {
         String osName = System.getProperty("os.name");
         String osNameLowerCase = osName.toLowerCase();
