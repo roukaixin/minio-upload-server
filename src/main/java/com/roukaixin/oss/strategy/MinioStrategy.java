@@ -60,12 +60,14 @@ public class MinioStrategy implements UploadStrategy {
                     headers, null);
 
             UploadTask build = UploadTask.builder()
+                    .ossType(ossProperties.getType())
                     .uploadId(uploadId)
                     .fileIdentifier(fileInfo.getFileIdentifier())
                     .fileName(fileInfo.getFileName())
                     .fileType(fileInfo.getFileType())
                     .bucketName(minioProperties.getBucket())
                     .objectKey(objectKey)
+                    .saveFullPath(minioProperties.getEndpoint() + "/" + minioProperties.getBucket() + "/" + objectKey)
                     .totalSize(fileInfo.getTotalSize())
                     .chunkSize(fileInfo.getChunkSize())
                     .chunkNumber(BigDecimal.valueOf(fileInfo.getTotalSize())

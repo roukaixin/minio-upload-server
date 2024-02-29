@@ -1,6 +1,8 @@
 package com.roukaixin.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.roukaixin.oss.enums.OssTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +24,11 @@ public class UploadTask {
      * mybatis plus 自动生成
      */
     private Long id;
+
+    /**
+     * oss 类型。（minio、本地(local)）
+     */
+    private OssTypeEnum ossType;
 
     /**
      * 分片上传的 uploadId
@@ -54,6 +61,11 @@ public class UploadTask {
     private String objectKey;
 
     /**
+     * 保存的全路径名
+     */
+    private String saveFullPath;
+
+    /**
      * 文件大小（byte）
      */
     private Long totalSize;
@@ -73,4 +85,11 @@ public class UploadTask {
      */
     @TableField(value = "is_completed")
     private boolean completed;
+
+    /**
+     * 是否删除
+     */
+    @TableField(value = "is_deleted")
+    @TableLogic
+    private boolean deleted;
 }

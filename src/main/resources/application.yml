@@ -44,3 +44,15 @@ oss:
       access-key: minio
       secret-key: 12345678
       bucket: minio-upload
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+logging:
+  level:
+    com.roukaixin.service.*: debug
+    com.roukaixin.mapper: debug
