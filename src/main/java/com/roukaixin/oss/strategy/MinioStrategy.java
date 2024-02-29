@@ -43,7 +43,8 @@ public class MinioStrategy implements UploadStrategy {
     @Override
     public UploadTask createMultipartUpload(FileInfoDTO fileInfo) {
         LambdaQueryWrapper<UploadTask> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(UploadTask::getFileIdentifier,fileInfo.getFileIdentifier());
+        wrapper.eq(UploadTask::getFileIdentifier, fileInfo.getFileIdentifier());
+        wrapper.eq(UploadTask::getOssType, ossProperties.getType());
         UploadTask task = uploadTaskService.getOne(wrapper);
         if (task == null) {
             // 没有上传任务

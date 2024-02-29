@@ -40,7 +40,9 @@ public class LocalStrategy implements UploadStrategy{
     public UploadTask createMultipartUpload(FileInfoDTO fileInfo) {
         // 判断上传任务是否存在
         UploadTask one = uploadTaskService.getOne(Wrappers.<UploadTask>lambdaQuery()
-                .eq(UploadTask::getFileIdentifier, fileInfo.getFileIdentifier()));
+                .eq(UploadTask::getFileIdentifier, fileInfo.getFileIdentifier())
+                .eq(UploadTask::getOssType, ossProperties.getType())
+        );
         if (Objects.isNull(one)) {
             // 上传任务不存在，新增一个上传任务
             String objectKey = UploadUtils.getObjectKey(fileInfo.getFileType(), fileInfo.getFileIdentifier(),
