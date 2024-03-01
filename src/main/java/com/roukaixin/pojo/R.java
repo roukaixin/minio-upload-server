@@ -50,7 +50,7 @@ public class R<T> {
     }
 
     public static <T> R<T> ok(T data){
-        R<T> t = new R<T>();
+        R<T> t = new R<>();
         t.setStatus(200);
         t.setMessage("操作成功");
         t.setData(data);
@@ -58,7 +58,7 @@ public class R<T> {
     }
 
     public static <T> R<T> ok(String message,T data){
-        R<T> t = new R<T>();
+        R<T> t = new R<>();
         t.setStatus(200);
         t.setMessage(message);
         t.setData(data);
