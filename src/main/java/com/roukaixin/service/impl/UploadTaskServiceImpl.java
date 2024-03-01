@@ -1,7 +1,9 @@
 package com.roukaixin.service.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.roukaixin.mapper.UploadTaskMapper;
+import com.roukaixin.oss.properties.OssProperties;
 import com.roukaixin.oss.strategy.UploadStrategy;
 import com.roukaixin.oss.strategy.UploadStrategyFactory;
 import com.roukaixin.pojo.R;
@@ -9,6 +11,7 @@ import com.roukaixin.pojo.UploadTask;
 import com.roukaixin.pojo.dto.FileInfoDTO;
 import com.roukaixin.pojo.dto.UploadPart;
 import com.roukaixin.service.UploadTaskService;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class UploadTaskServiceImpl extends ServiceImpl<UploadTaskMapper, UploadTask> implements UploadTaskService {
 
+
+    @Resource
+    private OssProperties ossProperties;
 
     @Override
     public R<UploadTask> createMultipartUploadId(FileInfoDTO fileInfoDto) {
@@ -43,6 +49,10 @@ public class UploadTaskServiceImpl extends ServiceImpl<UploadTaskMapper, UploadT
     public R<String> completeMultipartUploadAsync(FileInfoDTO fileInfoDto) {
         UploadStrategy instance = UploadStrategyFactory.getInstance();
         if (!instance.completeMultipartUploadAsync(fileInfoDto)) {
+            // 合并失败，删除上传任务
+            remove(Wrappers.<UploadTask>lambdaQuery()
+                    .eq(UploadTask::getFileIdentifier, fileInfoDto.getFileIdentifier())
+                    .eq(UploadTask::getOssType, ossProperties.getType()));
             throw new RuntimeException("合并失败");
         }
         return R.ok("合并成功");
