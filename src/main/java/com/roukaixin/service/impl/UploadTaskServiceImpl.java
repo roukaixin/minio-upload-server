@@ -7,6 +7,7 @@ import com.roukaixin.oss.strategy.UploadStrategyFactory;
 import com.roukaixin.pojo.R;
 import com.roukaixin.pojo.UploadTask;
 import com.roukaixin.pojo.dto.FileInfoDTO;
+import com.roukaixin.pojo.dto.UploadPart;
 import com.roukaixin.service.UploadTaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,13 @@ public class UploadTaskServiceImpl extends ServiceImpl<UploadTaskMapper, UploadT
         UploadStrategy instance = UploadStrategyFactory.getInstance();
         UploadTask multipartUpload = instance.createMultipartUpload(fileInfoDto);
         return R.ok("创建分片任务成功", multipartUpload);
+    }
+
+    @Override
+    public R<Object> uploadPartAsync(UploadPart uploadPart) {
+        UploadStrategy instance = UploadStrategyFactory.getInstance();
+        instance.uploadPartAsync(uploadPart);
+        return null;
     }
 
 //    @Resource

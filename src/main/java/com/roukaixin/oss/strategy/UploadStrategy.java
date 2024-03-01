@@ -2,6 +2,7 @@ package com.roukaixin.oss.strategy;
 
 import com.roukaixin.pojo.UploadTask;
 import com.roukaixin.pojo.dto.FileInfoDTO;
+import com.roukaixin.pojo.dto.UploadPart;
 
 /**
  * 上传接口
@@ -18,4 +19,10 @@ public interface UploadStrategy {
      * @return 上传文件信息
      */
     UploadTask createMultipartUpload(FileInfoDTO fileInfo);
+
+    /**
+     * 上传分片
+     * @param uploadPart 分片信息
+     */
+    void uploadPartAsync(UploadPart uploadPart);
 }

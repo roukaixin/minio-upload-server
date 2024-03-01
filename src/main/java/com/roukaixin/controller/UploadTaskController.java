@@ -3,6 +3,7 @@ package com.roukaixin.controller;
 import com.roukaixin.pojo.R;
 import com.roukaixin.pojo.UploadTask;
 import com.roukaixin.pojo.dto.FileInfoDTO;
+import com.roukaixin.pojo.dto.UploadPart;
 import com.roukaixin.service.UploadTaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,12 +30,12 @@ public class UploadTaskController {
         return uploadTaskService.createMultipartUploadId(fileInfoDto);
     }
 
-//    @Operation(summary = "上传分片")
-//    @PutMapping("/uploadPartAsync")
-//    @CrossOrigin
-//    public R<Object> uploadPartAsync(UploadPart uploadPart){
-//        return uploadTaskService.uploadPartAsync(uploadPart);
-//    }
+    @Operation(summary = "上传分片")
+    @PutMapping("/upload-part-async")
+    @CrossOrigin
+    public R<Object> uploadPartAsync(UploadPart uploadPart){
+        return uploadTaskService.uploadPartAsync(uploadPart);
+    }
 //
 //
 //    @Operation(summary = "合并分片")

@@ -8,15 +8,19 @@ import com.roukaixin.oss.properties.MinioProperties;
 import com.roukaixin.oss.properties.OssProperties;
 import com.roukaixin.pojo.UploadTask;
 import com.roukaixin.pojo.dto.FileInfoDTO;
+import com.roukaixin.pojo.dto.UploadPart;
 import com.roukaixin.service.UploadTaskService;
 import com.roukaixin.utils.UploadUtils;
+import io.minio.UploadPartResponse;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * minio 上传接口实现类
@@ -26,6 +30,7 @@ import java.math.RoundingMode;
  */
 @Component
 @ConditionalOnBean(value = MinioProperties.class)
+@Slf4j
 public class MinioStrategy implements UploadStrategy {
 
     @Resource
@@ -79,6 +84,37 @@ public class MinioStrategy implements UploadStrategy {
             return build;
         } else {
             return task;
+        }
+    }
+
+    @Override
+    public void uploadPartAsync(UploadPart uploadPart) {
+        // 上传任务
+        UploadTask uploadTask = uploadTaskService.getOne(new LambdaQueryWrapper<UploadTask>()
+                .eq(UploadTask::getFileIdentifier, uploadPart.getFileIdentifier())
+                .eq(UploadTask::getOssType, ossProperties.getType())
+        );
+        Multimap<String, String> headers = null;
+        if (StringUtils.hasText(uploadTask.getFileType())) {
+            headers = HashMultimap.create();
+            headers.put("Content-Type", uploadTask.getFileType());
+        }
+        String etag;
+        try {
+            CompletableFuture<UploadPartResponse> partAsync = customMinioClient.uploadPartAsync(
+                    uploadTask.getBucketName(), uploadTask.getObjectKey(),
+                    uploadPart.getFile().getInputStream(), uploadPart.getFile().getSize(),
+                    uploadTask.getUploadId(), uploadPart.getPartNumber(), headers);
+            etag = partAsync.get().etag();
+            log.info("etag：{}", etag);
+        } catch (Exception e) {
+            log.error("上传文件失败", e);
+            // 上传失败，清除上传任务
+            customMinioClient.abortMultipartUploadAsync(uploadTask.getBucketName(), uploadTask.getObjectKey(),
+                    uploadTask.getUploadId());
+            LambdaQueryWrapper<UploadTask> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(UploadTask::getUploadId, uploadTask.getUploadId());
+            uploadTaskService.remove(wrapper);
         }
     }
 }
