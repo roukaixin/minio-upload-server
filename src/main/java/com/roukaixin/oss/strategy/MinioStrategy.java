@@ -1,6 +1,7 @@
 package com.roukaixin.oss.strategy;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.roukaixin.oss.pojo.CustomMinioClient;
@@ -11,15 +12,19 @@ import com.roukaixin.pojo.dto.FileInfoDTO;
 import com.roukaixin.pojo.dto.UploadPart;
 import com.roukaixin.service.UploadTaskService;
 import com.roukaixin.utils.UploadUtils;
+import io.minio.ListPartsResponse;
 import io.minio.UploadPartResponse;
+import io.minio.messages.Part;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -122,6 +127,50 @@ public class MinioStrategy implements UploadStrategy {
 
     @Override
     public boolean completeMultipartUploadAsync(FileInfoDTO fileInfo) {
-        return false;
+        // 上传任务
+        UploadTask uploadTask = uploadTaskService.getOne(new LambdaQueryWrapper<UploadTask>()
+                .eq(UploadTask::getFileIdentifier, fileInfo.getFileIdentifier()));
+        if (ObjectUtils.isEmpty(uploadTask)) {
+            // 不存在上传任务
+            throw new RuntimeException("不存在上传任务，请先创建任务");
+        }
+        if (uploadTask.isCompleted()) {
+            return true;
+        }
+        // 获取全部分片信息
+        CompletableFuture<ListPartsResponse> partsAsync = customMinioClient.listPartsAsync(uploadTask.getBucketName(),
+                uploadTask.getObjectKey(), uploadTask.getChunkNumber(), uploadTask.getUploadId());
+        Part[] parts;
+        try {
+            List<Part> partList = partsAsync.get().result().partList();
+            // 判断是否上传全部分片
+            if (uploadTask.getChunkNumber() != partList.size()){
+                throw new RuntimeException("分片没有上传完成，不能进行合并");
+            }
+            parts = new Part[partList.size()];
+            log.info("分片列表大小：{}", partList.size());
+            for (int i = 0; i < partList.size(); i++) {
+                Part part = partList.get(i);
+                parts[i] = new Part(i+1,part.etag());
+            }
+        } catch (Exception e) {
+            log.error("获取全部分片信息失败。", e);
+            throw new RuntimeException(e.getMessage());
+        }
+
+        try {
+            long startTime = System.currentTimeMillis();
+            customMinioClient.completeMultipartUploadAsync(uploadTask.getBucketName(), uploadTask.getObjectKey(),
+                    uploadTask.getUploadId(), parts);
+            long endTime = System.currentTimeMillis();
+            log.info("合并分片耗时：{} ms",endTime - startTime);
+            uploadTask.setCompleted(true);
+            LambdaUpdateWrapper<UploadTask> wrapper = new LambdaUpdateWrapper<>();
+            wrapper.eq(UploadTask::getId, uploadTask.getId());
+            uploadTaskService.update(uploadTask, wrapper);
+            return true;
+        }catch (Exception e){
+            throw new RuntimeException("合并分片失败，请重新上传");
+        }
     }
 }
