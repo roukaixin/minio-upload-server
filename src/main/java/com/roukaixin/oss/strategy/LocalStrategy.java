@@ -74,8 +74,8 @@ public class LocalStrategy implements UploadStrategy{
                     .chunkSize(fileInfo.getChunkSize())
                     .chunkNumber(
                             BigDecimal.valueOf(fileInfo.getTotalSize())
-                                    .subtract(BigDecimal.valueOf(fileInfo.getChunkSize()))
-                                    .setScale(0, RoundingMode.UP).intValue()
+                                    .divide(BigDecimal.valueOf(fileInfo.getChunkSize()), RoundingMode.UP)
+                                    .intValue()
                     )
                     .build();
             // 把上传任务保存到数据库
