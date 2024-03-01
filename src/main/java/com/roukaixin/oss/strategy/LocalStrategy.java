@@ -158,7 +158,14 @@ public class LocalStrategy implements UploadStrategy{
                 // 读文件并复制到原文件
                 String filePath = UploadUtils.getSavePath(uploadTask.getBucketName(), uploadTask.getObjectKey(),
                         ossProperties.getType()) + uploadTask.getFileName();
-                try(FileOutputStream os = new FileOutputStream(filePath, true)) {
+                File targetFile = new File(filePath);
+                if (targetFile.exists()) {
+                    // 合并文件已存在，先删除
+                    if (targetFile.delete()) {
+                        log.info("合并文件已存在，先删除");
+                    }
+                }
+                try(FileOutputStream os = new FileOutputStream(targetFile, true)) {
                     for (File tmpFile : list) {
                         try(FileInputStream is = new FileInputStream(tmpFile)) {
                             byte[] read = new byte[1024 * 5];
