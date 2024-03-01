@@ -25,14 +25,14 @@ public interface UploadTaskService extends IService<UploadTask> {
     /**
      * 上传分片
      * @param uploadPart 分片信息
-     * @return UploadTask
+     * @return R<Object>
      */
     R<Object> uploadPartAsync(UploadPart uploadPart);
-//
-//    /**
-//     * 合并分片
-//     * @param fileInfoDto 文件信息
-//     * @return CompletableFuture<ObjectWriteResponse>
-//     */
-//    R<String> completeMultipartUploadAsync(FileInfoDTO fileInfoDto);
+
+    /**
+     * 合并分片
+     * @param fileInfoDto 文件信息
+     * @return R<String>
+     */
+    R<String> completeMultipartUploadAsync(FileInfoDTO fileInfoDto);
 }

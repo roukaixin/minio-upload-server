@@ -16,10 +16,14 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -128,5 +132,64 @@ public class LocalStrategy implements UploadStrategy{
             }
         }
 
+    }
+
+    @Override
+    public boolean completeMultipartUploadAsync(FileInfoDTO fileInfo) {
+        UploadTask uploadTask = uploadTaskService.getOne(
+                Wrappers.<UploadTask>lambdaQuery().eq(UploadTask::getFileIdentifier, fileInfo.getFileIdentifier())
+                        .eq(UploadTask::getOssType, ossProperties.getType())
+        );
+        if (ObjectUtils.isEmpty(uploadTask)) {
+            // 不存在上传任务
+            throw new RuntimeException("不存在上传任务，请先创建任务");
+        }
+        if (uploadTask.isCompleted()) {
+            return true;
+        }
+        String tmpSavePath = UploadUtils.getTmpSavePath(uploadTask.getBucketName(), uploadTask.getObjectKey(),
+                ossProperties.getType());
+        File file = new File(tmpSavePath);
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            if (files != null) {
+                List<File> list = Arrays.stream(files)
+                        .sorted(Comparator.comparingInt(o -> Integer.parseInt(o.getName()))).toList();
+                // 读文件并复制到原文件
+                String filePath = UploadUtils.getSavePath(uploadTask.getBucketName(), uploadTask.getObjectKey(),
+                        ossProperties.getType()) + uploadTask.getFileName();
+                try(FileOutputStream os = new FileOutputStream(filePath, true)) {
+                    for (File tmpFile : list) {
+                        try(FileInputStream is = new FileInputStream(tmpFile)) {
+                            byte[] read = new byte[1024 * 5];
+                            int line;
+                            while ((line = is.read(read)) != -1) {
+                                os.write(read, 0, line);
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    log.error("合并失败", e);
+                }
+                // 修改上传任务状态
+                uploadTask.setCompleted(true);
+                uploadTaskService.updateById(uploadTask);
+                // 合并成功，删除临时文件
+                list.forEach(e -> {
+                    if (e.delete()) {
+                        log.info("临时文件成功,文件名:{}", e.getName());
+                    } else {
+                        log.error("临时文件删除失败,文件名:{}", e.getName());
+                    }
+                });
+                if (file.delete()) {
+                    log.info("保存的临时文件删除成功");
+                } else {
+                    log.error("临时文件删除失败");
+                }
+                return true;
+            }
+        }
+        return false;
     }
 }

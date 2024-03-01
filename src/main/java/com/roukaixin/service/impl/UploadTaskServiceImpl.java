@@ -11,6 +11,7 @@ import com.roukaixin.pojo.dto.UploadPart;
 import com.roukaixin.service.UploadTaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 分片上传-分片任务记录
@@ -35,6 +36,16 @@ public class UploadTaskServiceImpl extends ServiceImpl<UploadTaskMapper, UploadT
         UploadStrategy instance = UploadStrategyFactory.getInstance();
         instance.uploadPartAsync(uploadPart);
         return null;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public R<String> completeMultipartUploadAsync(FileInfoDTO fileInfoDto) {
+        UploadStrategy instance = UploadStrategyFactory.getInstance();
+        if (!instance.completeMultipartUploadAsync(fileInfoDto)) {
+            throw new RuntimeException("合并失败");
+        }
+        return R.ok("合并成功");
     }
 
 //    @Resource

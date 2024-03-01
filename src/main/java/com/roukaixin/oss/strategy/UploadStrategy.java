@@ -25,4 +25,11 @@ public interface UploadStrategy {
      * @param uploadPart 分片信息
      */
     void uploadPartAsync(UploadPart uploadPart);
+
+    /**
+     * 合并分片
+     * @param fileInfo 文件信息
+     * @return 是否合并成功
+     */
+    boolean completeMultipartUploadAsync(FileInfoDTO fileInfo);
 }

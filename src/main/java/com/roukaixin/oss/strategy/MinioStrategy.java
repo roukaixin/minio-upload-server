@@ -117,4 +117,9 @@ public class MinioStrategy implements UploadStrategy {
             uploadTaskService.remove(wrapper);
         }
     }
+
+    @Override
+    public boolean completeMultipartUploadAsync(FileInfoDTO fileInfo) {
+        return false;
+    }
 }

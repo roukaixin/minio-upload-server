@@ -36,14 +36,14 @@ public class UploadTaskController {
     public R<Object> uploadPartAsync(UploadPart uploadPart){
         return uploadTaskService.uploadPartAsync(uploadPart);
     }
-//
-//
-//    @Operation(summary = "合并分片")
-//    @PostMapping("/completeMultipartUploadAsync")
-//    @CrossOrigin
-//    public R<String> completeMultipartUploadAsync(@RequestBody FileInfoDTO fileInfoDto){
-//        return uploadTaskService.completeMultipartUploadAsync(fileInfoDto);
-//    }
+
+
+    @Operation(summary = "合并分片")
+    @PostMapping("/complete-multipart-upload-async")
+    @CrossOrigin
+    public R<String> completeMultipartUploadAsync(@RequestBody FileInfoDTO fileInfoDto){
+        return uploadTaskService.completeMultipartUploadAsync(fileInfoDto);
+    }
 //
 //    @SneakyThrows
 //    @PutMapping("upload")
