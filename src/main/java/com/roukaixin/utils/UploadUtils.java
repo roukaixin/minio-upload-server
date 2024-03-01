@@ -125,7 +125,7 @@ public class UploadUtils {
      * @param ossTypeEnum oss 类型
      * @return String
      */
-    private static String getSeparator(OssTypeEnum ossTypeEnum) {
+    public static String getSeparator(OssTypeEnum ossTypeEnum) {
         String separator;
         if (Objects.requireNonNull(ossTypeEnum) == OssTypeEnum.LOCAL) {
             separator = File.separator;
