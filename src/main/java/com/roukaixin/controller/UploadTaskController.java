@@ -33,7 +33,7 @@ public class UploadTaskController {
     @Operation(summary = "上传分片")
     @PutMapping("/upload-part-async")
     @CrossOrigin
-    public R<Object> uploadPartAsync(UploadPart uploadPart){
+    public R<String> uploadPartAsync(UploadPart uploadPart){
         return uploadTaskService.uploadPartAsync(uploadPart);
     }
 

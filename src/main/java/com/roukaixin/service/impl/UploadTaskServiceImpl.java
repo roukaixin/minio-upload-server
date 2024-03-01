@@ -38,10 +38,10 @@ public class UploadTaskServiceImpl extends ServiceImpl<UploadTaskMapper, UploadT
     }
 
     @Override
-    public R<Object> uploadPartAsync(UploadPart uploadPart) {
+    public R<String> uploadPartAsync(UploadPart uploadPart) {
         UploadStrategy instance = UploadStrategyFactory.getInstance();
         instance.uploadPartAsync(uploadPart);
-        return null;
+        return R.ok("分片上传成功");
     }
 
     @Override
