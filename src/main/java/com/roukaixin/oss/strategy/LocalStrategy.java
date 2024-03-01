@@ -184,15 +184,15 @@ public class LocalStrategy implements UploadStrategy{
                 // 合并成功，删除临时文件
                 list.forEach(e -> {
                     if (e.delete()) {
-                        log.info("临时文件成功,文件名:{}", e.getName());
+                        log.info("临时分片文件删除成功,文件名:{}", e.getName());
                     } else {
-                        log.error("临时文件删除失败,文件名:{}", e.getName());
+                        log.error("临时分片文件删除失败,文件名:{}", e.getName());
                     }
                 });
                 if (file.delete()) {
-                    log.info("保存的临时文件删除成功");
+                    log.info("全部临时文件删除成功");
                 } else {
-                    log.error("临时文件删除失败");
+                    log.error("全部临时文件删除失败");
                 }
                 return true;
             }
