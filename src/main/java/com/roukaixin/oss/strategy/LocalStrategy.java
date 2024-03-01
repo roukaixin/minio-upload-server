@@ -170,6 +170,7 @@ public class LocalStrategy implements UploadStrategy{
                         log.info("合并文件已存在，先删除");
                     }
                 }
+                long startTime = System.currentTimeMillis();
                 try(FileOutputStream os = new FileOutputStream(targetFile, true)) {
                     for (File tmpFile : list) {
                         try(FileInputStream is = new FileInputStream(tmpFile)) {
@@ -180,6 +181,8 @@ public class LocalStrategy implements UploadStrategy{
                             }
                         }
                     }
+                    long endTime = System.currentTimeMillis();
+                    log.info("合并分片耗时：{} ms",endTime - startTime);
                 } catch (Exception e) {
                     log.error("合并失败", e);
                 }
