@@ -1,7 +1,6 @@
 package com.roukaixin.oss.strategy;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.roukaixin.oss.pojo.CustomMinioClient;
@@ -165,9 +164,7 @@ public class MinioStrategy implements UploadStrategy {
             long endTime = System.currentTimeMillis();
             log.info("合并分片耗时：{} ms",endTime - startTime);
             uploadTask.setCompleted(true);
-            LambdaUpdateWrapper<UploadTask> wrapper = new LambdaUpdateWrapper<>();
-            wrapper.eq(UploadTask::getId, uploadTask.getId());
-            uploadTaskService.update(uploadTask, wrapper);
+            uploadTaskService.updateById(uploadTask);
             return true;
         }catch (Exception e){
             throw new RuntimeException("合并分片失败，请重新上传");
