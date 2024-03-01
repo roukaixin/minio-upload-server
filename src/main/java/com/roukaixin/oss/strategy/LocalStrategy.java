@@ -155,6 +155,11 @@ public class LocalStrategy implements UploadStrategy{
             if (files != null) {
                 List<File> list = Arrays.stream(files)
                         .sorted(Comparator.comparingInt(o -> Integer.parseInt(o.getName()))).toList();
+                // 判断是否上传完全部分片
+                if (list.size() != uploadTask.getChunkNumber()) {
+                    throw new RuntimeException("分片没有上传完成，不能进行合并");
+                }
+
                 // 读文件并复制到原文件
                 String filePath = UploadUtils.getSavePath(uploadTask.getBucketName(), uploadTask.getObjectKey(),
                         ossProperties.getType()) + uploadTask.getFileName();
