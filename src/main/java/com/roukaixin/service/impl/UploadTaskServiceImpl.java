@@ -15,6 +15,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 分片上传-分片任务记录
@@ -56,6 +57,12 @@ public class UploadTaskServiceImpl extends ServiceImpl<UploadTaskMapper, UploadT
             throw new RuntimeException("合并失败");
         }
         return R.ok("合并成功");
+    }
+
+    @Override
+    public void upload(MultipartFile file) {
+        UploadStrategy instance = UploadStrategyFactory.getInstance();
+        instance.upload(file);
     }
 
 }

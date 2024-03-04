@@ -15,10 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
@@ -206,5 +203,26 @@ public class LocalStrategy implements UploadStrategy{
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean upload(MultipartFile file) {
+        String savePath = UploadUtils.getSavePath(localProperties.getRootPath(),
+                Objects.requireNonNull(file.getOriginalFilename()), ossProperties.getType());
+        File filePath = new File(savePath);
+        if (!filePath.exists()) {
+            if (filePath.mkdirs()) {
+                log.info("文件目录创建成功,{}", filePath.getAbsolutePath());
+            }
+        }
+        try(FileOutputStream os = new FileOutputStream(savePath + file.getOriginalFilename())) {
+            InputStream inputStream = file.getInputStream();
+            byte[] bytes = inputStream.readAllBytes();
+            os.write(bytes);
+            return true;
+        } catch (Exception e) {
+            log.error("上传失败", e);
+            return false;
+        }
     }
 }

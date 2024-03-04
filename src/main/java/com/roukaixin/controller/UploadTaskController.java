@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -44,16 +45,9 @@ public class UploadTaskController {
     public R<String> completeMultipartUploadAsync(@RequestBody FileInfoDTO fileInfoDto){
         return uploadTaskService.completeMultipartUploadAsync(fileInfoDto);
     }
-//
-//    @SneakyThrows
-//    @PutMapping("upload")
-//    public void upload(MultipartFile file){
-//        minioClient.putObject(
-//                PutObjectArgs.builder()
-//                        .bucket(minioProperties.getBucket())
-//                        .object(file.getOriginalFilename())
-//                        .stream(file.getInputStream(),file.getSize(),-1)
-//                        .contentType(file.getContentType())
-//                .build());
-//    }
+
+    @PutMapping("upload")
+    public void upload(MultipartFile file){
+        uploadTaskService.upload(file);
+    }
 }

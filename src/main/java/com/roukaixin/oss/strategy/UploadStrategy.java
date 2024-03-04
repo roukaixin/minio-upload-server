@@ -3,6 +3,7 @@ package com.roukaixin.oss.strategy;
 import com.roukaixin.pojo.UploadTask;
 import com.roukaixin.pojo.dto.FileInfoDTO;
 import com.roukaixin.pojo.dto.UploadPart;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 上传接口
@@ -32,4 +33,11 @@ public interface UploadStrategy {
      * @return 是否合并成功
      */
     boolean completeMultipartUploadAsync(FileInfoDTO fileInfo);
+
+    /**
+     * 普通上传
+     * @param file 文件
+     * @return boolean
+     */
+    boolean upload(MultipartFile file);
 }

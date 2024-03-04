@@ -5,6 +5,7 @@ import com.roukaixin.pojo.R;
 import com.roukaixin.pojo.UploadTask;
 import com.roukaixin.pojo.dto.FileInfoDTO;
 import com.roukaixin.pojo.dto.UploadPart;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 分片上传-分片任务记录
@@ -35,4 +36,10 @@ public interface UploadTaskService extends IService<UploadTask> {
      * @return R<String>
      */
     R<String> completeMultipartUploadAsync(FileInfoDTO fileInfoDto);
+
+    /**
+     * 普通上传
+     * @param file 文件
+     */
+    void upload(MultipartFile file);
 }

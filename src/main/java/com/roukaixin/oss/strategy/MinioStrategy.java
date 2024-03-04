@@ -12,6 +12,8 @@ import com.roukaixin.pojo.dto.UploadPart;
 import com.roukaixin.service.UploadTaskService;
 import com.roukaixin.utils.UploadUtils;
 import io.minio.ListPartsResponse;
+import io.minio.MinioClient;
+import io.minio.PutObjectArgs;
 import io.minio.UploadPartResponse;
 import io.minio.messages.Part;
 import jakarta.annotation.Resource;
@@ -20,7 +22,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
@@ -48,6 +52,9 @@ public class MinioStrategy implements UploadStrategy {
 
     @Resource
     private OssProperties ossProperties;
+
+    @Resource
+    private MinioClient minioClient;
 
     @Override
     public UploadTask createMultipartUpload(FileInfoDTO fileInfo) {
@@ -168,6 +175,23 @@ public class MinioStrategy implements UploadStrategy {
             return true;
         }catch (Exception e){
             throw new RuntimeException("合并分片失败，请重新上传");
+        }
+    }
+
+    @Override
+    public boolean upload(MultipartFile file) {
+        try(InputStream is = file.getInputStream()) {
+            minioClient.putObject(
+                    PutObjectArgs.builder()
+                            .bucket(minioProperties.getBucket())
+                            .object(file.getOriginalFilename())
+                            .stream(is, file.getSize(),-1)
+                            .contentType(file.getContentType())
+                            .build());
+            return true;
+        } catch (Exception e) {
+            log.error("上传失败，", e);
+            return false;
         }
     }
 }
